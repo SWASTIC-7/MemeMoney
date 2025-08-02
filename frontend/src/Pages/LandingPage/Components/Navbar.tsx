@@ -8,8 +8,18 @@ import './Navbar.css'
 function Navbar() {
   const navigate = useNavigate();
 
-function Auth() {
-    navigate('/auth');
+async function Auth() {
+  await fetch("http://localhost:3001/api/deploy", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name: "MemeCoin",
+    symbol: "MEME",
+    supply: 1000000,
+    decimals: 2,
+  }),
+});
+ 
 }
 
   return (
