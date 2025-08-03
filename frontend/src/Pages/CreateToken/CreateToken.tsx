@@ -1,22 +1,18 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React from 'react'
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Container } from "@tsparticles/engine";
-import "./Landing.css";
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Create from "./Components/Create";
-import Buy from "./Components/Buy";
-import About from "./Components/About";
-// import Wallet from "./Components/wallet";
+import './CreateToken.css';
+import Navbar from '../LandingPage/Components/Navbar';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import CreateForm from './Components/createForm';
 
-
-function Landing() {
-  const [init, setInit] = useState(false);
+function CreateToken() {
+   const [init, setInit] = useState(false);
   const smoother = useRef<any>(null);
   const main = useRef<HTMLDivElement | null>(null);
-  const particlesLoaded = (container: any): void => {
-    console.log(container);
+  const particlesLoaded = async (container?: Container): Promise<void> => {
+    
   };
 
   const options = useMemo(() => ({
@@ -52,7 +48,7 @@ function Landing() {
         value: "#ffffff",
       },
       move: {
-        direction: "none",
+        direction: 'none',
         enable: true,
         outModes: {
           default: "bounce",
@@ -94,18 +90,11 @@ function Landing() {
     <div className="Layer1" ref={main}>
       <Particles id="tsparticles" particlesLoaded={particlesLoaded} options={options} />
       <div className="Layer2">
-        <Navbar />
-        <Home />
-        <h1 id="hello" className="Halo">CREATE COIN</h1>
-        <Create />
-        <h1 className="Halo">TRADE COIN</h1>
-        <Buy />
-        <h1 className="Halo">ABOUT US</h1>
-        <About />
-        {/* <Wallet /> */}
+        {/* <Navbar /> */}
+       <CreateForm />
       </div>
     </div>
   );
 }
 
-export default Landing;
+export default CreateToken
