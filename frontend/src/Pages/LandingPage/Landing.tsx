@@ -8,7 +8,9 @@ import Home from "./Components/Home";
 import Create from "./Components/Create";
 import Buy from "./Components/Buy";
 import About from "./Components/About";
-// import Wallet from "./Components/wallet";
+import Wallet from "./Components/wallet";
+import Transfer from "./Components/transfer";
+import ERC from "./Components/erc"
 
 
 function Landing() {
@@ -102,7 +104,9 @@ function Landing() {
         <Buy />
         <h1 className="Halo">ABOUT US</h1>
         <About />
-        {/* <Wallet /> */}
+        <Wallet />
+        <Transfer />
+        <ERC />
       </div>
     </div>
   );

@@ -1,82 +1,239 @@
-import { useState } from 'react';
-import { ethers } from 'ethers';
-import MemeTokenFactoryABI from '../abi/memetokenfactory.json';
+import { useState } from "react";
+import { ethers } from "ethers";
 
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
+// Replace with your contract address
+const CONTRACT_ADDRESS = "0xf8e81D47203A594245E36C48e151709F0C19fBe8";
 
-const FACTORY_CONTRACT_ADDRESS = '0x35267D331E44f0d61761DB1859eA7C0b55843291'; // Your factory address
+// Replace with your ABI
+const CONTRACT_ABI = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"name": "CallResponseEvent",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "treasury",
+				"type": "address"
+			},
+			{
+				"internalType": "int64",
+				"name": "initialTotalSupply",
+				"type": "int64"
+			},
+			{
+				"internalType": "int32",
+				"name": "decimals",
+				"type": "int32"
+			}
+		],
+		"name": "createToken",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "encodedFunctionSelector",
+				"type": "bytes"
+			}
+		],
+		"name": "redirectForToken",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "responseCode",
+				"type": "int256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "response",
+				"type": "bytes"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "int64",
+				"name": "responseCode",
+				"type": "int64"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "serialNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFromNFT",
+		"outputs": [
+			{
+				"internalType": "int64",
+				"name": "responseCode",
+				"type": "int64"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
 
-interface WalletInfo {
-  address: string;
-  signer: ethers.JsonRpcSigner;
-}
+export default function TokenCreateForm() {
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [tokenAddress, setTokenAddress] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-export default function CreateToken() {
-  const [wallet, setWallet] = useState<WalletInfo | null>(null);
-  const [status, setStatus] = useState<string>('');
-
-  const connectWallet = async () => {
+  async function connectWallet() {
     if (!window.ethereum) {
-      alert('Please install MetaMask');
+      alert("Please install MetaMask");
       return;
     }
 
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const accounts = await provider.send("eth_requestAccounts", []);
+    setWalletAddress(accounts[0]);
+  }
+
+  async function handleCreateToken() {
     try {
+      setLoading(true);
       const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const address = await signer.getAddress();
 
-      setWallet({ address, signer });
-      console.log('Wallet connected:', address);
-      setStatus('Wallet connected: ' + address);
-    } catch (error: any) {
-      console.error('Connection failed:', error);
-      setStatus('Error: ' + error.message);
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+      const name = "MyToken";
+      const symbol = "MTK";
+      const treasury = walletAddress;
+      const initialTotalSupply = 1_000_000;
+      const decimals = 2;
+
+      const tx = await contract.createToken(name, symbol, treasury, initialTotalSupply, decimals);
+      const receipt = await tx.wait();
+
+	  const logs = receipt.logs;
+	  const iface = new ethers.Interface(CONTRACT_ABI);
+	  const parsed = iface.parseLog(logs[0]);
+	  if (parsed && parsed.args && parsed.args[0]) {
+		const createdTokenAddress = parsed.args[0];
+		setTokenAddress(createdTokenAddress);
+	  } else {
+		throw new Error("Failed to parse token address from logs.");
+	  }
+    } catch (err) {
+      console.error("Token creation failed:", err);
+      alert("Token creation failed: see console");
+    } finally {
+      setLoading(false);
     }
-  };
-
-const createToken = async () => {
-  if (!wallet) {
-    alert('Connect your wallet first');
-    return;
   }
-
-  try {
-    const res = await fetch('http://localhost:5000/api/create-token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: 'MemeC',
-        symbol: 'MEME',
-        supply: '10000',
-        userAddress: wallet.address
-      })
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    
-    setStatus(`Token created! Tx: ${data.txHash}`);
-  } catch (error: any) {
-    console.error('Token creation failed:', error);
-    setStatus('Error: ' + error.message);
-  }
-}; 
 
   return (
-    <div style={{ padding: '20px' }}>
-      <button onClick={connectWallet}>Connect MetaMask</button>
-      <button onClick={createToken} disabled={!wallet}>
-        Deploy Meme Token
+    <div className="p-4">
+      <button onClick={connectWallet} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded">
+        Connect Wallet
       </button>
-      <p>Status: {status}</p>
+
+      {walletAddress && <p>Connected: {walletAddress}</p>}
+
+      <button
+        onClick={handleCreateToken}
+        className="bg-green-600 text-white px-4 py-2 mt-4 rounded"
+        disabled={loading}
+      >
+        {loading ? "Creating Token..." : "Create Token"}
+      </button>
+
+      {tokenAddress && (
+        <p className="mt-4 text-green-600">
+          Token created at address: <span className="font-mono">{tokenAddress}</span>
+        </p>
+      )}
     </div>
   );
 }
