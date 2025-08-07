@@ -11,6 +11,8 @@ import About from "./Components/About";
 import Wallet from "./Components/wallet";
 import Transfer from "./Components/transfer";
 import ERC from "./Components/erc"
+import LiquidityPool from "./Components/LiquidityPoll";
+import Stake from "./Components/stake";
 
 
 function Landing() {
@@ -104,9 +106,11 @@ function Landing() {
         <Buy />
         <h1 className="Halo">ABOUT US</h1>
         <About />
-        <Wallet />
-        <Transfer />
+        {/* <Wallet /> */}
+        {/* <Transfer /> */}
         <ERC />
+        <LiquidityPool />
+        <Stake />
       </div>
     </div>
   );

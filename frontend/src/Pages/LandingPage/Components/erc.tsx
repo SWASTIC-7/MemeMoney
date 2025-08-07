@@ -25,14 +25,16 @@ export default function CreateToken() {
   };
 
   const deployToken = async () => {
-    if (!signer) return;
+    if (!signer || !provider) return;
 
-    const name = "MyDynamicToken";
-  const symbol = "MDT";
+    const name = "MyDynamicTokedsd";
+  const symbol = "MDTd";
   const initialSupply = 10000; // In whole tokens, not wei
+  const nonce = await provider.getTransactionCount(address, "latest");
+
 
   const factory = new ethers.ContractFactory(ERC20TokenABI, ERC20TokenBytecode, signer);
-  const contract = await factory.deploy(name, symbol, address, initialSupply);
+  const contract = await factory.deploy(name, symbol, address, initialSupply,{nonce});
   await contract.waitForDeployment();
 
   const deployedAddress = await contract.getAddress();
