@@ -44,7 +44,7 @@ export default function CreateToken() {
   setTxHash(deploymentTx ? deploymentTx.hash : "");
 
   const contract2 = new ethers.Contract(deployedAddress, ERC20TokenABI, signer);
-  const balance = await contract2.balanceOf(address);
+  const balance = await contract2.balanceOf(deployedAddress);
   console.log(`Deployed token at ${deployedAddress} with balance: ${balance.toString()}`);
   };
 

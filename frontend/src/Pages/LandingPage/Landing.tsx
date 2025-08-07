@@ -13,6 +13,7 @@ import Transfer from "./Components/transfer";
 import ERC from "./Components/erc"
 import LiquidityPool from "./Components/LiquidityPoll";
 import Stake from "./Components/stake";
+import Lock_Check from "./Components/lock_check";
 
 
 function Landing() {
@@ -111,6 +112,7 @@ function Landing() {
         <ERC />
         <LiquidityPool />
         <Stake />
+        <Lock_Check />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { ethers,parseEther } from "ethers";
 // Replace with your actual deployed contract address
-const CONTRACT_ADDRESS = "0x5b8921F0C7d4a9249974042C13e96C4dd95F6D75";
+const CONTRACT_ADDRESS = "0x74d1C01FAAd6939316dc027193df2598EcD565c4";
 const HbarStakingAbi=[
 	{
 		"inputs": [],
@@ -156,8 +156,8 @@ const HbarStakingAbi=[
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
-const STAKE_AMOUNT = ethers.parseEther("1");
+];
+const STAKE_AMOUNT = parseEther("1");
 
 export default function HbarStake() {
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
@@ -198,6 +198,8 @@ export default function HbarStake() {
       setStatus("Staking in progress...");
       await tx.wait();
       setStatus("Staking successful!");
+      const v = await contract.getStakeInfo(account);
+      console.log("Stake Info:", v);
     } catch (error) {
       console.error(error);
       setStatus("Staking failed");
@@ -212,6 +214,7 @@ export default function HbarStake() {
       setStatus("Withdrawal in progress...");
       await tx.wait();
       setStatus("Withdrawal successful!");
+      
     } catch (error) {
       console.error(error);
       setStatus("Withdrawal failed or too early");
