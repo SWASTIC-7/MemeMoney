@@ -5,6 +5,9 @@ import Doge from '../../../assets/Original_Doge_meme.jpg'
 import { PumpFunPoolABI } from '../../../abi/pool_abi';
 import { useAppStore } from "../../../../Store";
 import { ERC20TokenABI } from '../../../abi/erc';
+import { CONTRACT_ABI } from '../../../abi/trader_lock'; 
+
+const CONTRACT_ADDRESS = "0xd75bd600567e14a2d8415680E4491aFE47b61Ac0";
 import {
   LineChart,
   Line,
@@ -44,6 +47,9 @@ type DataPoint = {
 const [estimatedSellHbar, setEstimatedSellHbar] = useState<string>("0");
 const [data, setData] = useState<DataPoint[]>([]);
 const [ImmediatePrice, setImmediatePrice] = useState<string>("0");
+  const [canBuyStatus, setCanBuyStatus] = useState<string>("");
+  const [canSellStatus, setCanSellStatus] = useState<string>("");
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
 
   const tokenAddress = useAppStore((state) => state.tokenAddress);
   const poolAddress = useAppStore((state) => state.poolAddress);
@@ -93,8 +99,13 @@ useEffect(() => {
   }, [poolAddress, signer]);
   useEffect(() => {
     connectWallet();
-    fetchPoolStats();
+    
   }, []);
+  useEffect(() => {
+  if (poolAddress && signer) {
+    fetchPoolStats(); // initial call when dependencies are ready
+  }
+}, [poolAddress, signer]);
 
     const fetchUserBalances = async () => {
     if (!tokenAddress || !signer || !address) return;
@@ -218,9 +229,7 @@ useEffect(() => {
     }
   };
 
-  useEffect(() => {
-  console.log("Immediate Price updated:", ImmediatePrice);
-}, [ImmediatePrice]);
+
   
   const fetchPoolStats = async () => {
     if (!poolAddress || !signer) return;
@@ -248,7 +257,7 @@ useEffect(() => {
       const progressPercent = hbarReserves > 0 ? 
         Math.min((Number(ethers.formatEther(hbarReserves)) / 69) * 100, 100) : 0;
       setImmediatePrice(ethers.formatEther(currentPrice));
-      // console.log("Immediate Price:", ImmediatePrice);  
+     
       console.log("Pool Stats Debug:", {
         currentPrice: ethers.formatEther(currentPrice),
 		    stats: stats.map ? stats.map((s: unknown) => String(s)) : stats,
@@ -283,6 +292,71 @@ useEffect(() => {
       console.error("Error fetching pool stats:", error);
     }
   };
+   async function checkCanBuy() {
+    if (!window.ethereum || !address) return;
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      const [canBuy, reason] = await contract["canBuy"](address, BigInt(buyAmount));
+
+      setCanBuyStatus(canBuy ? `Allowed: ${reason}` : `Not Allowed: ${reason}`);
+    } catch (err) {
+      console.error("Check Error:", err);
+      setCanBuyStatus("Error checking buy permission.");
+    }
+  }
+    async function checkCanSell() {
+    if (!window.ethereum || !address) return;
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      const [canSell, reason] = await contract["canSell"](address, BigInt(sellAmount));
+
+      setCanSellStatus(canSell ? `Allowed: ${reason}` : `Not Allowed: ${reason}`);
+    } catch (err) {
+      console.error("Check Error:", err);
+      setCanSellStatus("Error checking sell permission.");
+    }
+  }
+  async function register(){
+    if(!window.ethereum || !address) return;
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      // console.log("Registering with amount:", BigInt(200000),contract);
+      const tx = await contract.registerUser(BigInt(200000));
+      await tx.wait();
+
+      alert("Registration successful!");
+      setIsRegistered(true);
+    } catch (err) {
+      console.error("Registration Error:", err);
+    }
+  }
+  function rr(){
+    
+    if(isRegistered){
+      checkCanBuy();
+    }else{
+      register();
+      checkCanBuy();
+    }
+  }
+    function rr2(){
+    
+    if(isRegistered){
+      checkCanSell();
+    }else{
+      register();
+      checkCanSell();
+    }
+  }
   return (
     <>
       <h1 className='Halo trans'>TRADE</h1>
@@ -299,12 +373,12 @@ useEffect(() => {
                               <div  className='PoolStats'>
                                 <h3>Pool Statistics</h3>
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                                  <p><strong>Current Price:</strong> {parseFloat(poolStats.currentPrice).toFixed(8)} HBAR/Token</p>
+                                  <p><strong>Current Price:</strong> {(parseFloat(poolStats.currentPrice)*10**5).toFixed(5)} 1e5 HBAR/Token</p>
                                   <p><strong>Price in USD:</strong> ${poolStats.priceInUSD}</p>
                                   <p><strong>Market Cap:</strong> {(69.00000).toFixed(4)} HBAR</p>
-                                  <p><strong>Total HBAR Raised:</strong> {parseFloat(poolStats.totalHbarRaised).toFixed(4)} HBAR</p>
+                                  <p><strong>Total HBAR Raised:</strong> {(parseFloat(poolStats.totalHbarRaised)*10**10).toFixed(4)} 1e10 HBAR</p>
                                   <p><strong>Tokens Remaining:</strong> {parseFloat(poolStats.tokensRemaining).toFixed(2)}</p>
-                                  <p><strong>Graduation Progress:</strong> {poolStats.progressToGraduation}%</p>
+                                  <p><strong>Graduation Progress:</strong> {(Number(poolStats.progressToGraduation) * 10**10).toFixed(2)} 1e10%</p>
                                 </div>
                                 {poolStats.isGraduated && (
                                   <div style={{ color: "green", fontWeight: "bold", textAlign: "center", marginTop: "10px" }}>

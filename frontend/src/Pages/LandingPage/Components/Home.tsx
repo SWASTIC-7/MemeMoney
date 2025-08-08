@@ -8,15 +8,15 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(useGSAP);
 
 function Home() {
-    const tl = useRef();
+    const tl = useRef<gsap.core.Timeline | null>(null);
     useEffect(() => {
-        tl.current.play();
+        tl.current?.play();
     }, []);
     useGSAP(
         () => {
             tl.current = gsap
                 .timeline({ repeat: -1 })
-                .to('.Arrow',{y: -10 , ease: 'bounce', duration: 1})
+                .to('.Arrow',{y: -20 , ease: 'bounce', duration: 1})
                 .reverse()
         })
   return (

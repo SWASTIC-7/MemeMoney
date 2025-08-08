@@ -371,12 +371,12 @@ useEffect(() => {
                               <div  className='PoolStats'>
                                 <h3>Pool Statistics</h3>
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                                  <p><strong>Current Price:</strong> {parseFloat(poolStats.currentPrice).toFixed(8)} HBAR/Token</p>
+                                  <p><strong>Current Price:</strong> {(parseFloat(poolStats.currentPrice)*10**5).toFixed(8)} 1e5 HBAR</p>
                                   <p><strong>Price in USD:</strong> ${poolStats.priceInUSD}</p>
                                   <p><strong>Market Cap:</strong> {(69.00000).toFixed(4)} HBAR</p>
-                                  <p><strong>Total HBAR Raised:</strong> {parseFloat(poolStats.totalHbarRaised).toFixed(4)} HBAR</p>
+                                  <p><strong>Total HBAR Raised:</strong> {(parseFloat(poolStats.totalHbarRaised)*10**10).toFixed(4)} 1e10 HBAR</p>
                                   <p><strong>Tokens Remaining:</strong> {parseFloat(poolStats.tokensRemaining).toFixed(2)}</p>
-                                  <p><strong>Graduation Progress:</strong> {poolStats.progressToGraduation}%</p>
+                                  <p><strong>Graduation Progress:</strong> {(Number(poolStats.progressToGraduation) * 10**10).toFixed(2)} 1e10%</p>
                                 </div>
                                 {poolStats.isGraduated && (
                                   <div style={{ color: "green", fontWeight: "bold", textAlign: "center", marginTop: "10px" }}>

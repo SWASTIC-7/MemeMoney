@@ -10,11 +10,10 @@ import Buy from "./Components/Buy";
 import About from "./Components/About";
 import Wallet from "./Components/wallet";
 import Transfer from "./Components/transfer";
-import ERC from "./Components/erc"
-import LiquidityPool from "./Components/LiquidityPoll";
+
+
 import Stake from "./Components/stake";
-import Lock_Check from "./Components/lock_check";
-import Hts from "./Components/hts";
+import TraderLock from "./Components/trader_lock_check";
 
 
 function Landing() {
@@ -108,13 +107,7 @@ function Landing() {
         <Buy />
         <h1 className="Halo">ABOUT US</h1>
         <About />
-        {/* <Wallet /> */}
-        {/* <Transfer /> */}
-        <ERC />
-        <LiquidityPool />
-        <Stake />
-        <Lock_Check />
-        <Hts />
+       
       </div>
     </div>
   );

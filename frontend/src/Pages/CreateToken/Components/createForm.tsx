@@ -158,7 +158,7 @@ const setTokenInf = useAppStore((state) => state.setTokenInfo);
 	  await initTx.wait();
 	  
 	  setTxHash(initTx.hash);
-	  alert("Pool deployed and initialized successfully!");
+    alert(`Pool deployed and initialized successfully! Address: ${deployedAddress}`);
       
     setPoolAddres(deployedAddress);
     console.log("Token Address:", tokenAddre);
