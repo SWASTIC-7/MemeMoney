@@ -2,6 +2,10 @@
 
 Welcome to **MemeCoin**, a Platfrom where you can trade and create memecoin safely avoiding issues like Rug pull, Whale Dumps and Wallet Spamming.
 
+[MEMEMONEY APP LINK](https://meme-money-a.vercel.app/)
+
+![HOME](./src/assets/home.png)
+
 ## What Is MemeCoin?
 
 **MemeCoin** is a decentralized application (dApp) that lets users:
@@ -38,5 +42,5 @@ Welcome to **MemeCoin**, a Platfrom where you can trade and create memecoin safe
 
 ---
 
-[Video Tutorial] https://youtu.be/lU9YIfGBLGg
+[Video Tutorial](https://youtu.be/lU9YIfGBLGg)
 
