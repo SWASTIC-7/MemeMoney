@@ -793,7 +793,7 @@ useEffect(() => {
           </div>
           {poolStats.isGraduated && (
             <div style={{ color: "green", fontWeight: "bold", textAlign: "center", marginTop: "10px" }}>
-              🎓 Pool Graduated! 🎓
+              Pool Graduated! 
             </div>
           )}
         </div>
@@ -801,7 +801,7 @@ useEffect(() => {
 
       {/* Buy Tokens */}
       <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #green", borderRadius: "8px" }}>
-        <h3>💚 Buy Tokens</h3>
+        <h3>Buy Tokens</h3>
         <input
           type="number"
           placeholder="HBAR amount"
@@ -819,7 +819,7 @@ useEffect(() => {
 
       {/* Sell Tokens */}
       <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #red", borderRadius: "8px" }}>
-        <h3>❤️ Sell Tokens</h3>
+        <h3>Sell Tokens</h3>
         <input
           type="number"
           placeholder="Token amount"

@@ -47,20 +47,16 @@ type DataPoint = {
 const [estimatedSellHbar, setEstimatedSellHbar] = useState<string>("0");
 const [data, setData] = useState<DataPoint[]>([]);
 const [ImmediatePrice, setImmediatePrice] = useState<string>("0");
-  // Contract parameters
-  // const [contractAddress, setContractAddress] = useState<string>('');
   const contractAddress = "0xd03d1582A42a9c56DE60Cb638bA14c16f10f3771"
   const [graduationProgress, setGraduationProgress] = useState<number>(0);
   const [totalTokens, setTotalTokens] = useState<string>('1000000');
   const [saleAmount, setSaleAmount] = useState<string>('');
    const [contract, setContract] = useState<ethers.Contract | null>(null);
-  // Contract state
   const [canSellTokens, setCanSellTokens] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [maxSaleAmount, setMaxSaleAmount] = useState<string>('0');
   const [remainingMilestones, setRemainingMilestones] = useState<number[]>([]);
   
-  // UI state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info');
@@ -90,15 +86,14 @@ const [ImmediatePrice, setImmediatePrice] = useState<string>("0");
   }, [ImmediatePrice]);
 useEffect(() => {
     const interval = setInterval(() => {
-      const newValue = parseFloat(priceRef.current); // random float
-      const timestamp = new Date().toLocaleTimeString(); // current time as string
+      const newValue = parseFloat(priceRef.current); 
+      const timestamp = new Date().toLocaleTimeString(); 
 
       setData((prevData) => [
         ...prevData,
         { time: timestamp, value: newValue },
       ]);
-    }, 10000); // every 10 sec
-
+    }, 10000); 
     return () => clearInterval(interval);
   }, []);
   useEffect(() => {
@@ -184,7 +179,6 @@ useEffect(() => {
       setTxHash(tx.hash);
       setBuyAmount("");
       
-      // Refresh data
       await fetchPoolStats();
       await fetchUserBalances();
       
@@ -205,12 +199,10 @@ useEffect(() => {
     try {
       const tokenAmount = ethers.parseEther(sellAmount);
       
-      // Approve tokens for pool
       const tokenContract = new ethers.Contract(tokenAddress, ERC20TokenABI, signer);
       const approveTx = await tokenContract.approve(poolAddress, tokenAmount);
       await approveTx.wait();
       
-      // Sell tokens
       const pool = new ethers.Contract(poolAddress, PumpFunPoolABI, signer);
       const tx = await pool.sellTokens(tokenAmount);
       await tx.wait();
@@ -218,7 +210,6 @@ useEffect(() => {
       setTxHash(tx.hash);
       setSellAmount("");
       
-      // Refresh data
       await fetchPoolStats();
       await fetchUserBalances();
       
@@ -290,7 +281,6 @@ useEffect(() => {
     try {
       const pool = new ethers.Contract(poolAddress, PumpFunPoolABI, signer);
       
-      // Fetch all stats individually for better error handling
       const [
         currentPrice,
         stats,
@@ -305,20 +295,18 @@ useEffect(() => {
         pool.realHbarReserves().catch(() => ethers.parseEther("0"))
       ]);
 
-      // Calculate graduation progress manually if needed
       const graduationCap = ethers.parseEther("69"); // 69 HBAR
       const progressPercent = hbarReserves > 0 ? 
         Math.min((Number(ethers.formatEther(hbarReserves)) / 69) * 100, 100) : 0;
       setImmediatePrice(ethers.formatEther(currentPrice));
-      // console.log("Immediate Price:", ImmediatePrice);  
-      console.log("Pool Stats Debug:", {
-        currentPrice: ethers.formatEther(currentPrice),
-		    stats: stats.map ? stats.map((s: unknown) => String(s)) : stats,
-        priceInUSD: priceInUSD.toString(),
-        graduated,
-        hbarReserves: ethers.formatEther(hbarReserves),
-        progressPercent
-      });
+      // console.log("Pool Stats Debug:", {
+      //   currentPrice: ethers.formatEther(currentPrice),
+		  //   stats: stats.map ? stats.map((s: unknown) => String(s)) : stats,
+      //   priceInUSD: priceInUSD.toString(),
+      //   graduated,
+      //   hbarReserves: ethers.formatEther(hbarReserves),
+      //   progressPercent
+      // });
       
       setPoolStat({
         currentPrice: ethers.formatEther(currentPrice),
@@ -340,7 +328,7 @@ useEffect(() => {
       });
       
 
-      console.log("Pool Stats:", poolSta);
+      // console.log("Pool Stats:", poolSta);
     } catch (error) {
       console.error("Error fetching pool stats:", error);
     }

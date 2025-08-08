@@ -25,7 +25,6 @@ function Navbar() {
     }
   };
 
-  // Format address like: 0xAbc...1234
   const formatAddress = (addr: string) => {
     return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : '';
   };

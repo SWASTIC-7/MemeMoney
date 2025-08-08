@@ -62,10 +62,8 @@ function MemeCoin({ tokenAddress, poolAddress }: MemeCoinProps) {
         contract2.totalSupply()
       ]);
 
-      // Get balances for different addresses
       const ownerBalance = await contract2.balanceOf(address);
       
-      // Format the total supply and balances
       const formattedTotalSupply = formatUnits(_totalSupply, _decimals);
       const formattedOwnerBalance = formatUnits(ownerBalance, _decimals);
       const formattedContractBalance = formatUnits(balance, _decimals);

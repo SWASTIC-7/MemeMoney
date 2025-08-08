@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { ethers ,parseEther,formatEther,isAddress} from 'ethers';
 import { AlertCircle, CheckCircle, Clock, TrendingUp, Wallet } from 'lucide-react';
 
-// Contract ABI (simplified for the main functions we need)
 const CONTRACT_ABI = [
 	{
 		"inputs": [],
@@ -416,30 +415,25 @@ const CONTRACT_ABI = [
 ];
 
 const TokenSaleValidator: React.FC = () => {
-  // State variables
   const [account, setAccount] = useState<string>('');
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   
-  // Contract parameters
   const [contractAddress, setContractAddress] = useState<string>('');
   const [graduationProgress, setGraduationProgress] = useState<number>(0);
   const [totalTokens, setTotalTokens] = useState<string>('1000000');
   const [saleAmount, setSaleAmount] = useState<string>('');
   
-  // Contract state
   const [canSellTokens, setCanSellTokens] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [maxSaleAmount, setMaxSaleAmount] = useState<string>('0');
   const [remainingMilestones, setRemainingMilestones] = useState<number[]>([]);
   
-  // UI state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info');
 
-  // Connect wallet
   const connectWallet = async () => {
     try {
       if (typeof window.ethereum !== 'undefined') {
@@ -465,7 +459,6 @@ const TokenSaleValidator: React.FC = () => {
     }
   };
 
-  // Initialize contract
   const initializeContract = () => {
     if (signer && contractAddress && isAddress(contractAddress)) {
       const contractInstance = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
@@ -478,7 +471,6 @@ const TokenSaleValidator: React.FC = () => {
     }
   };
 
-  // Check if user can sell
   const checkCanSell = async () => {
     if (!contract || !account || !saleAmount) {
       setMessage('Please connect wallet, initialize contract, and enter sale amount');
@@ -510,7 +502,6 @@ const TokenSaleValidator: React.FC = () => {
     }
   };
 
-  // Validate and execute sale
   const executeSale = async () => {
     if (!contract || !account || !saleAmount) {
       setMessage('Please connect wallet, initialize contract, and enter sale amount');
@@ -545,7 +536,6 @@ const TokenSaleValidator: React.FC = () => {
     }
   };
 
-  // Get user information
   const getUserInfo = async () => {
     if (!contract || !account) return;
 
@@ -572,7 +562,6 @@ const TokenSaleValidator: React.FC = () => {
     }
   };
 
-  // Auto-refresh user info when parameters change
   useEffect(() => {
     if (contract && account) {
       getUserInfo();
@@ -597,7 +586,6 @@ const TokenSaleValidator: React.FC = () => {
             <p className="text-gray-600">Check if you can sell your tokens based on graduation progress and cooldown periods</p>
           </div>
 
-          {/* Wallet Connection */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
               <Wallet className="mr-2" size={20} />
@@ -628,7 +616,6 @@ const TokenSaleValidator: React.FC = () => {
             )}
           </div>
 
-          {/* Contract Configuration */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">Contract Configuration</h2>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -654,7 +641,6 @@ const TokenSaleValidator: React.FC = () => {
             </div>
           </div>
 
-          {/* Sale Parameters */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
               <TrendingUp className="mr-2" size={20} />
@@ -694,7 +680,6 @@ const TokenSaleValidator: React.FC = () => {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">Actions</h2>
             <div className="flex space-x-4">
@@ -715,7 +700,6 @@ const TokenSaleValidator: React.FC = () => {
             </div>
           </div>
 
-          {/* Status Display */}
           {message && (
             <div className={`rounded-lg p-4 mb-6 flex items-center ${
               messageType === 'success' ? 'bg-green-100 text-green-800' :
@@ -729,7 +713,6 @@ const TokenSaleValidator: React.FC = () => {
             </div>
           )}
 
-          {/* User Information */}
           {userInfo && (
             <div className="bg-gray-50 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">User Sale Information</h2>

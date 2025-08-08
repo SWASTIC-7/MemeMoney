@@ -83,7 +83,7 @@ useEffect(() => {
         ...prevData,
         { time: timestamp, value: newValue },
       ]);
-    }, 10000); // every 10 sec
+    }, 10000); 
 
     return () => clearInterval(interval);
   }, []);
@@ -103,7 +103,7 @@ useEffect(() => {
   }, []);
   useEffect(() => {
   if (poolAddress && signer) {
-    fetchPoolStats(); // initial call when dependencies are ready
+    fetchPoolStats(); 
   }
 }, [poolAddress, signer]);
 
@@ -133,7 +133,6 @@ useEffect(() => {
       setTxHash(tx.hash);
       setBuyAmount("");
       
-      // Refresh data
       await fetchPoolStats();
       await fetchUserBalances();
       
@@ -154,12 +153,10 @@ useEffect(() => {
     try {
       const tokenAmount = ethers.parseEther(sellAmount);
       
-      // Approve tokens for pool
       const tokenContract = new ethers.Contract(tokenAddress, ERC20TokenABI, signer);
       const approveTx = await tokenContract.approve(poolAddress, tokenAmount);
       await approveTx.wait();
       
-      // Sell tokens
       const pool = new ethers.Contract(poolAddress, PumpFunPoolABI, signer);
       const tx = await pool.sellTokens(tokenAmount);
       await tx.wait();
@@ -167,7 +164,6 @@ useEffect(() => {
       setTxHash(tx.hash);
       setSellAmount("");
       
-      // Refresh data
       await fetchPoolStats();
       await fetchUserBalances();
       
@@ -237,7 +233,6 @@ useEffect(() => {
     try {
       const pool = new ethers.Contract(poolAddress, PumpFunPoolABI, signer);
       
-      // Fetch all stats individually for better error handling
       const [
         currentPrice,
         stats,
@@ -252,7 +247,6 @@ useEffect(() => {
         pool.realHbarReserves().catch(() => ethers.parseEther("0"))
       ]);
 
-      // Calculate graduation progress manually if needed
       const graduationCap = ethers.parseEther("69"); // 69 HBAR
       const progressPercent = hbarReserves > 0 ? 
         Math.min((Number(ethers.formatEther(hbarReserves)) / 69) * 100, 100) : 0;
@@ -302,6 +296,7 @@ useEffect(() => {
       const [canBuy, reason] = await contract["canBuy"](address, BigInt(buyAmount));
 
       setCanBuyStatus(canBuy ? `Allowed: ${reason}` : `Not Allowed: ${reason}`);
+      return canBuy; 
     } catch (err) {
       console.error("Check Error:", err);
       setCanBuyStatus("Error checking buy permission.");
@@ -317,6 +312,7 @@ useEffect(() => {
       const [canSell, reason] = await contract["canSell"](address, BigInt(sellAmount));
 
       setCanSellStatus(canSell ? `Allowed: ${reason}` : `Not Allowed: ${reason}`);
+      return canSell; 
     } catch (err) {
       console.error("Check Error:", err);
       setCanSellStatus("Error checking sell permission.");
@@ -329,7 +325,6 @@ useEffect(() => {
       const signer = await provider.getSigner();
 
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-      // console.log("Registering with amount:", BigInt(200000),contract);
       const tx = await contract.registerUser(BigInt(200000));
       await tx.wait();
 
@@ -339,24 +334,33 @@ useEffect(() => {
       console.error("Registration Error:", err);
     }
   }
-  function rr(){
-    
-    if(isRegistered){
-      checkCanBuy();
-    }else{
-      register();
-      checkCanBuy();
-    }
+  async function rr() {
+  if (!isRegistered) {
+    await register();
   }
-    function rr2(){
-    
-    if(isRegistered){
-      checkCanSell();
-    }else{
-      register();
-      checkCanSell();
-    }
+
+  const canBuy = await checkCanBuy(); 
+
+  if (canBuy) {
+    buyTokens();
+  } else {
+    alert("You are not allowed to buy tokens.");
   }
+}
+
+async function rr2() {
+  if (!isRegistered) {
+    await register();
+  }
+
+  const canSell = await checkCanSell();
+
+  if (canSell) {
+    sellTokens();
+  } else {
+    alert("You are not allowed to sell tokens.");
+  }
+}
   return (
     <>
       <h1 className='Halo trans'>TRADE</h1>
@@ -411,7 +415,7 @@ useEffect(() => {
                               className='buy-input'
                             />
                             
-                            <button onClick={buyTokens} disabled={!poolAddress || !buyAmount || loading} className='buy-btn'>
+                            <button onClick={rr} disabled={!poolAddress || !buyAmount || loading} className='buy-btn'>
                               {loading ? "Buying..." : "Buy Tokens"}
                             </button>
                             {buyAmount && (
@@ -429,7 +433,7 @@ useEffect(() => {
                               className='sell-input'
                             />
                             
-                            <button onClick={sellTokens} disabled={!poolAddress || !sellAmount || loading} className='sell-btn'>
+                            <button onClick={rr2} disabled={!poolAddress || !sellAmount || loading} className='sell-btn'>
                               {loading ? "Selling..." : "Sell Tokens"}
                             </button>
                             {sellAmount && (

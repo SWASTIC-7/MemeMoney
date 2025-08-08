@@ -64,7 +64,7 @@ const setTokenInf = useAppStore((state) => state.setTokenInfo);
 
     const name = tokenName || "DefaultTokenName";
   const symbol = Symbol || "DTN";
-  const initialSupply = totalSupply || 10000; // In whole tokens, not wei
+  const initialSupply = totalSupply || 10000; 
   const nonce = await provider.getTransactionCount(address, "latest");
 
 
@@ -88,10 +88,8 @@ const setTokenInf = useAppStore((state) => state.setTokenInfo);
         contract2.totalSupply()
       ]);
 
-      // Get balances for different addresses
       const ownerBalance = await contract2.balanceOf(address);
       
-      // Format the total supply and balances
       const formattedTotalSupply = formatUnits(totalSupply, _decimals);
       const formattedOwnerBalance = formatUnits(ownerBalance, _decimals);
       const formattedContractBalance = formatUnits(balance, _decimals);
@@ -135,7 +133,6 @@ const setTokenInf = useAppStore((state) => state.setTokenInfo);
     
     setLoading(true);
     try {
-      // Deploy the pool contract
       const factory = new ethers.ContractFactory(PumpFunPoolABI, PumpFunPoolBytecode, signer);
 	  const poolDeployment = await factory.deploy(tokenAddress, address);
 	  await poolDeployment.waitForDeployment();
@@ -143,16 +140,13 @@ const setTokenInf = useAppStore((state) => state.setTokenInfo);
 	  const deployedAddress = await poolDeployment.getAddress();
 	  setPoolAddress(deployedAddress);
 	  
-	  // Initialize pool with 80% of token supply
 	  const tokenContract = new ethers.Contract(tokenAddress, ERC20TokenABI, signer);
 	  const totalSupply = await tokenContract.totalSupply();
 	  const poolTokens = (totalSupply * 80n) / 100n; // 80%
 	  
-	  // Approve tokens for pool
 	  const approveTx = await tokenContract.approve(deployedAddress, poolTokens);
 	  await approveTx.wait();
 	  
-	  // Initialize pool
 	  const pool = new ethers.Contract(deployedAddress, PumpFunPoolABI, signer);
 	  const initTx = await pool.initializePool(poolTokens);
 	  await initTx.wait();

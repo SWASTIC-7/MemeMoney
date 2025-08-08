@@ -13,7 +13,6 @@ export default function SendHbar() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [status, setStatus] = useState<string>('');
 
-  // Connect wallet
   const connectWallet = async () => {
     if (!window.ethereum) {
       alert('MetaMask not detected');
@@ -34,7 +33,6 @@ export default function SendHbar() {
     }
   };
 
-  // Send 10 HBAR
   const sendHbar = async () => {
     if (!walletAddress) {
       alert('Please connect your wallet first');
@@ -49,7 +47,7 @@ export default function SendHbar() {
 
       const tx = await signer.sendTransaction({
         to: RECEIVER_ADDRESS,
-        value: ethers.parseEther('10'), // 10 HBAR (in tinybars)
+        value: ethers.parseEther('10'), 
       });
 
       setStatus('Waiting for confirmation...');

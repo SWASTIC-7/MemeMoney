@@ -14,7 +14,7 @@ function About() {
             <div className='Icons'>
                 <img src={Instagram} alt='Instagram'/>
                 <img src={Twitter} alt='Twitter'/>
-                <img src={Youtube} alt='Youtube'/>
+                <img src={Youtube} alt='Youtube' onClick={() => window.open("https://youtu.be/lU9YIfGBLGg", "_blank")}/>
             </div>
         </div>
 

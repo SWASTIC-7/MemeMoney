@@ -58,7 +58,6 @@ function TraderLock() {
       const signer = await provider.getSigner();
 
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-      // console.log("Registering with amount:", BigInt(200000),contract);
       const tx = await contract.registerUser(BigInt(200000));
       await tx.wait();
 
