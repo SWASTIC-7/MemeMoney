@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import  { useState} from 'react';
 import Logo from '../../../assets/Logo.svg';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { ethers } from 'ethers';
 
 function Navbar() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
-  const [signer, setSigner] = useState<ethers.Signer | null>(null);
+  const [_provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [_signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>('');
 
   const connectWallet = async () => {

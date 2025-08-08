@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-import { CONTRACT_ABI } from '../../../abi/trader_lock';
+import { CONTRACT_ABI } from '../abi/trader_lock';
 
 const CONTRACT_ADDRESS = '0xd75bd600567e14a2d8415680E4491aFE47b61Ac0';
 

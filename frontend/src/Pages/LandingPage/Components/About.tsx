@@ -1,4 +1,3 @@
-import React from 'react';
 import Logo from '../../../assets/Lateral_Logo.svg';
 import './About.css';
 import Instagram from '../../../assets/instagram.svg';

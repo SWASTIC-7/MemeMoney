@@ -1,18 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import  { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import './creatortrade.css';
 import Doge from '../../../assets/Original_Doge_meme.jpg';
 import { PumpFunPoolABI } from '../../../abi/pool_abi';
 import { useAppStore } from '../../../../Store';
 import { ERC20TokenABI } from '../../../abi/erc';
-import { parseEther, formatEther, isAddress } from 'ethers';
-import {
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  Wallet,
-} from 'lucide-react';
+import { parseEther,  isAddress } from 'ethers';
+
 import { CONTRACT_ABI } from '../../../abi/creator_lock';
 import {
   LineChart,
@@ -39,39 +33,34 @@ function creatortrade() {
     value: number; // Y-axis
   };
   const [loading, setLoading] = useState<boolean>(false);
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [_provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>('');
   const [buyAmount, setBuyAmount] = useState<string>('');
   const [sellAmount, setSellAmount] = useState<string>('');
   const [poolStats, setPoolStats] = useState<PoolStats | null>(null);
-  const [txHash, setTxHash] = useState<string>('');
-  const [userTokenBalance, setUserTokenBalance] = useState<string>('0');
-  const [userHbarBalance, setUserHbarBalance] = useState<string>('0');
+  const [_txHash, setTxHash] = useState<string>('');
+  const [_userTokenBalance, setUserTokenBalance] = useState<string>('0');
   const [estimatedBuyTokens, setEstimatedBuyTokens] = useState<string>('0');
   const [estimatedSellHbar, setEstimatedSellHbar] = useState<string>('0');
   const [data, setData] = useState<DataPoint[]>([]);
   const [ImmediatePrice, setImmediatePrice] = useState<string>('0');
   const contractAddress = '0xd03d1582A42a9c56DE60Cb638bA14c16f10f3771';
-  const [graduationProgress, setGraduationProgress] = useState<number>(0);
-  const [totalTokens, setTotalTokens] = useState<string>('1000000');
-  const [saleAmount, setSaleAmount] = useState<string>('');
+  const [graduationProgress, _setGraduationProgress] = useState<number>(0);
+  const [totalTokens, _setTotalTokens] = useState<string>('1000000');
+  const [saleAmount, _setSaleAmount] = useState<string>('');
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [canSellTokens, setCanSellTokens] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const [maxSaleAmount, setMaxSaleAmount] = useState<string>('0');
-  const [remainingMilestones, setRemainingMilestones] = useState<number[]>([]);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
-  const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>(
+  const [_isLoading, setIsLoading] = useState<boolean>(false);
+  const [_message, setMessage] = useState<string>('');
+  const [_messageType, setMessageType] = useState<'success' | 'error' | 'info'>(
     'info'
   );
 
   const tokenAddress = useAppStore((state) => state.tokenAddress);
   const poolAddress = useAppStore((state) => state.poolAddress);
   const setPoolStat = useAppStore((state) => state.setPoolStats);
-  const poolSta = useAppStore((state) => state.poolStats);
   const tokenInfo = useAppStore((state) => state.tokenInfo);
 
   const connectWallet = async () => {
@@ -116,6 +105,9 @@ function creatortrade() {
     connectWallet();
     fetchPoolStats();
   }, []);
+  useEffect(() => {
+    initializeContract();
+  }, [signer, contractAddress]);
 
   const initializeContract = () => {
     if (signer && contractAddress && isAddress(contractAddress)) {
@@ -308,7 +300,7 @@ function creatortrade() {
           pool.realHbarReserves().catch(() => ethers.parseEther('0')),
         ]);
 
-      const graduationCap = ethers.parseEther('69'); // 69 HBAR
+      // const graduationCap = ethers.parseEther('69'); // 69 HBAR
       const progressPercent =
         hbarReserves > 0
           ? Math.min((Number(ethers.formatEther(hbarReserves)) / 69) * 100, 100)

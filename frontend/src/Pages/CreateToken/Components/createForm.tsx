@@ -1,4 +1,3 @@
-import React from 'react';
 import './createForm.css';
 import { useEffect, useState } from 'react';
 import { ethers, formatUnits } from 'ethers';
@@ -8,17 +7,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../../Store';
 
 function createForm() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [_loading, setLoading] = useState<boolean>(false);
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>('');
-  const [txHash, setTxHash] = useState<string>('');
-  const [contractAddress, setContractAddress] = useState<string>('');
+  const [_txHash, setTxHash] = useState<string>('');
+  const [_contractAddress, setContractAddress] = useState<string>('');
   const [tokenName, setTokenName] = useState('');
   const [Symbol, setSymbol] = useState('');
   const [totalSupply, setTotalSupply] = useState('');
 
-  const [poolAddress, setPoolAddress] = useState<string>('');
+  const [_poolAddress, setPoolAddress] = useState<string>('');
   const [tokenAddress, setTokenAddress] = useState<string>('');
   const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ function createForm() {
     contractAddress: string;
   };
 
-  const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
+  const [_tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
 
   const connectWallet = async () => {
     if (window.ethereum) {

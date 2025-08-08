@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import './Tradertrade.css';
 import Doge from '../../../assets/Original_Doge_meme.jpg';
@@ -33,21 +33,20 @@ function Tradertrade() {
     value: number; // Y-axis
   };
   const [loading, setLoading] = useState<boolean>(false);
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [_provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>('');
   const [buyAmount, setBuyAmount] = useState<string>('');
   const [sellAmount, setSellAmount] = useState<string>('');
   const [poolStats, setPoolStats] = useState<PoolStats | null>(null);
-  const [txHash, setTxHash] = useState<string>('');
-  const [userTokenBalance, setUserTokenBalance] = useState<string>('0');
-  const [userHbarBalance, setUserHbarBalance] = useState<string>('0');
+  const [_txHash, setTxHash] = useState<string>('');
+  const [_userTokenBalance, setUserTokenBalance] = useState<string>('0');
   const [estimatedBuyTokens, setEstimatedBuyTokens] = useState<string>('0');
   const [estimatedSellHbar, setEstimatedSellHbar] = useState<string>('0');
   const [data, setData] = useState<DataPoint[]>([]);
   const [ImmediatePrice, setImmediatePrice] = useState<string>('0');
-  const [canBuyStatus, setCanBuyStatus] = useState<string>('');
-  const [canSellStatus, setCanSellStatus] = useState<string>('');
+  const [_canBuyStatus, setCanBuyStatus] = useState<string>('');
+  const [_canSellStatus, setCanSellStatus] = useState<string>('');
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
 
   const tokenAddress = useAppStore((state) => state.tokenAddress);
@@ -243,7 +242,7 @@ function Tradertrade() {
           pool.realHbarReserves().catch(() => ethers.parseEther('0')),
         ]);
 
-      const graduationCap = ethers.parseEther('69'); // 69 HBAR
+      // const graduationCap = ethers.parseEther('69'); // 69 HBAR
       const progressPercent =
         hbarReserves > 0
           ? Math.min((Number(ethers.formatEther(hbarReserves)) / 69) * 100, 100)

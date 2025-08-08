@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import './MemeCoin.css';
 import Doge from '../../../assets/Original_Doge_meme.jpg';
 import { ERC20TokenABI } from '../../../abi/erc';
@@ -28,7 +28,7 @@ function MemeCoin({ tokenAddress, poolAddress }: MemeCoinProps) {
   const setTokenAddress = useAppStore((state) => state.setTokenAddress);
   const setPoolAddress = useAppStore((state) => state.setPoolAddress);
 
-  const tokenInf = useAppStore((state) => state.tokenInfo);
+  // const tokenInf = useAppStore((state) => state.tokenInfo);
   const setTokenInf = useAppStore((state) => state.setTokenInfo);
 
   const connectWallet = async () => {

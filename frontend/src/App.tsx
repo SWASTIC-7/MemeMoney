@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter, Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Landing from './Pages/LandingPage/Landing';
 import Create from './Pages/CreateToken/CreateToken';
 import Buy from './Pages/buytoken/BuyToken';

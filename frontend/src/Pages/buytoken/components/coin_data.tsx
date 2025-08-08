@@ -1,4 +1,3 @@
-import React from 'react';
 import './coinData.css';
 import Doge from '../../../assets/Original_Doge_meme.jpg';
 

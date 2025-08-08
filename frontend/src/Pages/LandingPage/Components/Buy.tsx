@@ -1,4 +1,3 @@
-import React from 'react';
 import MemeCoin from './MemeCoin';
 import './Buy.css';
 import See from '../../../assets/Seemore.svg';

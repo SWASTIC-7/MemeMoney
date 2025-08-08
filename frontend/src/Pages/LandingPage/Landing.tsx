@@ -12,7 +12,7 @@ import Wallet from './Components/wallet';
 import Transfer from './Components/transfer';
 
 import Stake from './Components/stake';
-import TraderLock from './Components/trader_lock_check';
+import TraderLock from '../../garbage/trader_lock_check';
 
 function Landing() {
   const [init, setInit] = useState(false);

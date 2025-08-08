@@ -1,4 +1,3 @@
-import React from 'react';
 import './Home.css';
 import Arrow from '../../../assets/Arrow 1.svg';
 import { useRef, useEffect } from 'react';

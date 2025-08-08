@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import Doge from '../../../assets/Original_Doge_meme.jpg';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
@@ -7,7 +7,7 @@ function Create() {
   const navigate = useNavigate();
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
-  const [address, setAddress] = useState<string>('');
+  const [_address, setAddress] = useState<string>('');
 
   const connectWallet = async () => {
     if (window.ethereum) {
