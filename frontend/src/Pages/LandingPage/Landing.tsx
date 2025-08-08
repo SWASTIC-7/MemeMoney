@@ -1,26 +1,22 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import  { useEffect, useMemo, useRef, useState } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
-import type { Container } from '@tsparticles/engine';
+import { MoveDirection } from "@tsparticles/engine";
+import { OutMode } from "@tsparticles/engine";
 import './Landing.css';
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import Create from './Components/Create';
 import Buy from './Components/Buy';
 import About from './Components/About';
-import Wallet from './Components/wallet';
-import Transfer from './Components/transfer';
 
-import Stake from './Components/stake';
-import TraderLock from '../../garbage/trader_lock_check';
 
 function Landing() {
   const [init, setInit] = useState(false);
-  const smoother = useRef<any>(null);
   const main = useRef<HTMLDivElement | null>(null);
-  const particlesLoaded = (container: any): void => {
-    console.log(container);
-  };
+  // const particlesLoaded = (container: any): void => {
+  //   console.log(container);
+  // };
 
   const options = useMemo(
     () => ({
@@ -56,11 +52,9 @@ function Landing() {
           value: '#ffffff',
         },
         move: {
-          direction: 'none',
+          direction: MoveDirection.none,
           enable: true,
-          outModes: {
-            default: 'bounce',
-          },
+          outModes: OutMode.bounce,
           random: false,
           speed: 6,
           straight: false,
@@ -98,9 +92,8 @@ function Landing() {
 
   return (
     <div className="Layer1" ref={main}>
-      <Particles
+       <Particles
         id="tsparticles"
-        particlesLoaded={particlesLoaded}
         options={options}
       />
       <div className="Layer2">
