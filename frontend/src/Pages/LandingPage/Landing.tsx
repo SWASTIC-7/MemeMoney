@@ -1,20 +1,18 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import type { Container } from "@tsparticles/engine";
-import "./Landing.css";
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Create from "./Components/Create";
-import Buy from "./Components/Buy";
-import About from "./Components/About";
-import Wallet from "./Components/wallet";
-import Transfer from "./Components/transfer";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Particles, { initParticlesEngine } from '@tsparticles/react';
+import { loadSlim } from '@tsparticles/slim';
+import type { Container } from '@tsparticles/engine';
+import './Landing.css';
+import Navbar from './Components/Navbar';
+import Home from './Components/Home';
+import Create from './Components/Create';
+import Buy from './Components/Buy';
+import About from './Components/About';
+import Wallet from './Components/wallet';
+import Transfer from './Components/transfer';
 
-
-import Stake from "./Components/stake";
-import TraderLock from "./Components/trader_lock_check";
-
+import Stake from './Components/stake';
+import TraderLock from './Components/trader_lock_check';
 
 function Landing() {
   const [init, setInit] = useState(false);
@@ -24,66 +22,69 @@ function Landing() {
     console.log(container);
   };
 
-  const options = useMemo(() => ({
-    background: {
-      color: {
-        value: "#104E6E",
+  const options = useMemo(
+    () => ({
+      background: {
+        color: {
+          value: '#104E6E',
+        },
       },
-    },
-    fpsLimit: 120,
-    interactivity: {
-      events: {
-        onClick: {
+      fpsLimit: 120,
+      interactivity: {
+        events: {
+          onClick: {
+            enable: true,
+            mode: 'push',
+          },
+          onHover: {
+            enable: true,
+            mode: 'repulse',
+          },
+        },
+        modes: {
+          push: {
+            quantity: 4,
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.4,
+          },
+        },
+      },
+      particles: {
+        color: {
+          value: '#ffffff',
+        },
+        move: {
+          direction: 'none',
           enable: true,
-          mode: "push",
+          outModes: {
+            default: 'bounce',
+          },
+          random: false,
+          speed: 6,
+          straight: false,
         },
-        onHover: {
-          enable: true,
-          mode: "repulse",
+        number: {
+          density: {
+            enable: true,
+          },
+          value: 200,
+        },
+        opacity: {
+          value: 1,
+        },
+        shape: {
+          type: 'circle',
+        },
+        size: {
+          value: { min: 1, max: 2 },
         },
       },
-      modes: {
-        push: {
-          quantity: 4,
-        },
-        repulse: {
-          distance: 200,
-          duration: 0.4,
-        },
-      },
-    },
-    particles: {
-      color: {
-        value: "#ffffff",
-      },
-      move: {
-        direction: "none",
-        enable: true,
-        outModes: {
-          default: "bounce",
-        },
-        random: false,
-        speed: 6,
-        straight: false,
-      },
-      number: {
-        density: {
-          enable: true,
-        },
-        value: 200,
-      },
-      opacity: {
-        value: 1,
-      },
-      shape: {
-        type: "circle",
-      },
-      size: {
-        value: { min: 1, max: 2 },
-      },
-    },
-    detectRetina: true,
-  }), []);
+      detectRetina: true,
+    }),
+    []
+  );
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
@@ -97,17 +98,22 @@ function Landing() {
 
   return (
     <div className="Layer1" ref={main}>
-      <Particles id="tsparticles" particlesLoaded={particlesLoaded} options={options} />
+      <Particles
+        id="tsparticles"
+        particlesLoaded={particlesLoaded}
+        options={options}
+      />
       <div className="Layer2">
         <Navbar />
         <Home />
-        <h1 id="hello" className="Halo">CREATE COIN</h1>
+        <h1 id="hello" className="Halo">
+          CREATE COIN
+        </h1>
         <Create />
         <h1 className="Halo">TRADE COIN</h1>
         <Buy />
         <h1 className="Halo">ABOUT US</h1>
         <About />
-       
       </div>
     </div>
   );

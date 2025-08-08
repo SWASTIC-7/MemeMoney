@@ -9,7 +9,7 @@ function Navbar() {
 
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -30,11 +30,11 @@ function Navbar() {
   };
 
   return (
-    <div className='Nav'>
-      <img src={Logo} alt='Logo' className='Logo' />
+    <div className="Nav">
+      <img src={Logo} alt="Logo" className="Logo" />
 
-      <div className='Nav_bttns'>
-        <div className='Register Nav_Box' onClick={connectWallet}>
+      <div className="Nav_bttns">
+        <div className="Register Nav_Box" onClick={connectWallet}>
           {address ? formatAddress(address) : 'CONNECT WALLET'}
         </div>
       </div>

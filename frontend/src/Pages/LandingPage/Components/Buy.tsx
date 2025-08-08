@@ -7,7 +7,7 @@ import memeCoinList from './hardcodedAddress';
 function Buy() {
   return (
     <div>
-      <div className='Coin_grid'>
+      <div className="Coin_grid">
         {memeCoinList.map((coin, index) => (
           <MemeCoin
             key={index}
@@ -16,7 +16,7 @@ function Buy() {
           />
         ))}
       </div>
-      <img src={See} alt='See more' className='See_more' />
+      <img src={See} alt="See more" className="See_more" />
     </div>
   );
 }

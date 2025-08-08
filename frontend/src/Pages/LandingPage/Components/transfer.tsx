@@ -47,7 +47,7 @@ export default function SendHbar() {
 
       const tx = await signer.sendTransaction({
         to: RECEIVER_ADDRESS,
-        value: ethers.parseEther('10'), 
+        value: ethers.parseEther('10'),
       });
 
       setStatus('Waiting for confirmation...');

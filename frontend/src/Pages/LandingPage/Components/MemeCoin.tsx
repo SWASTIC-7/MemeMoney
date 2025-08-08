@@ -16,83 +16,80 @@ function MemeCoin({ tokenAddress, poolAddress }: MemeCoinProps) {
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>('');
   const [tokenInfo, setTokenInfo] = useState({
-  name: '',
-  symbol: '',
-  decimals: 18,
-  totalSupply: '',
-  totalSupplyRaw: '',
-  ownerBalance: '',
-  contractBalance: '',
-  contractAddress: ''
-});
+    name: '',
+    symbol: '',
+    decimals: 18,
+    totalSupply: '',
+    totalSupplyRaw: '',
+    ownerBalance: '',
+    contractBalance: '',
+    contractAddress: '',
+  });
   const setTokenAddress = useAppStore((state) => state.setTokenAddress);
   const setPoolAddress = useAppStore((state) => state.setPoolAddress);
-  
+
   const tokenInf = useAppStore((state) => state.tokenInfo);
   const setTokenInf = useAppStore((state) => state.setTokenInfo);
 
-
-    const connectWallet = async () => {
+  const connectWallet = async () => {
     if (window.ethereum) {
       const newProvider = new ethers.BrowserProvider(window.ethereum);
-      await window.ethereum.request({ method: "eth_requestAccounts" });
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
       const newSigner = await newProvider.getSigner();
       const userAddress = await newSigner.getAddress();
       setProvider(newProvider);
       setSigner(newSigner);
       setAddress(userAddress);
     } else {
-      alert("MetaMask not detected");
+      alert('MetaMask not detected');
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     connectWallet();
   }, []);
-     useEffect(() => {
+  useEffect(() => {
     fetching();
   }, [provider, signer, tokenAddress, poolAddress]);
 
   const fetching = async () => {
     const contract2 = new ethers.Contract(tokenAddress, ERC20TokenABI, signer);
-  const balance = await contract2.balanceOf(tokenAddress);
-   const [_name, _symbol,_decimals, _totalSupply] = await Promise.all([
-        contract2.name(),
-        contract2.symbol(), 
-        contract2.decimals(),
-        contract2.totalSupply()
-      ]);
+    const balance = await contract2.balanceOf(tokenAddress);
+    const [_name, _symbol, _decimals, _totalSupply] = await Promise.all([
+      contract2.name(),
+      contract2.symbol(),
+      contract2.decimals(),
+      contract2.totalSupply(),
+    ]);
 
-      const ownerBalance = await contract2.balanceOf(address);
-      
-      const formattedTotalSupply = formatUnits(_totalSupply, _decimals);
-      const formattedOwnerBalance = formatUnits(ownerBalance, _decimals);
-      const formattedContractBalance = formatUnits(balance, _decimals);
-      
-      setTokenInfo({
-        name: _name,
-        symbol: _symbol,
-        decimals: Number(_decimals),
-        totalSupply: formattedTotalSupply,
-        totalSupplyRaw: _totalSupply.toString(),
-        ownerBalance: formattedOwnerBalance,
-        contractBalance: formattedContractBalance,
-        contractAddress: tokenAddress,
-      });
-  }
+    const ownerBalance = await contract2.balanceOf(address);
+
+    const formattedTotalSupply = formatUnits(_totalSupply, _decimals);
+    const formattedOwnerBalance = formatUnits(ownerBalance, _decimals);
+    const formattedContractBalance = formatUnits(balance, _decimals);
+
+    setTokenInfo({
+      name: _name,
+      symbol: _symbol,
+      decimals: Number(_decimals),
+      totalSupply: formattedTotalSupply,
+      totalSupplyRaw: _totalSupply.toString(),
+      ownerBalance: formattedOwnerBalance,
+      contractBalance: formattedContractBalance,
+      contractAddress: tokenAddress,
+    });
+  };
   const navigation = () => {
     setTokenInf(tokenInfo);
     setTokenAddress(tokenAddress);
-      setPoolAddress(poolAddress);
-    navigate('./traderplatform')
+    setPoolAddress(poolAddress);
+    navigate('./traderplatform');
   };
 
   return (
-    <div className='MemeCoin' onClick={navigation}>
-      <div className='Coin'>
-        <img className='Coin_photu' src={Doge} alt='Meme Coin' />
-        <div className='Coin_details'>
-
-
+    <div className="MemeCoin" onClick={navigation}>
+      <div className="Coin">
+        <img className="Coin_photu" src={Doge} alt="Meme Coin" />
+        <div className="Coin_details">
           <h3>NAME: {tokenInfo?.name}</h3>
           <h3>SYMBOL: {tokenInfo?.symbol}</h3>
           <h3>SUPPLY: {tokenInfo?.totalSupply}</h3>
