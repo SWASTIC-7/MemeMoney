@@ -1,17 +1,13 @@
-import React from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
-import type { Container } from '@tsparticles/engine';
-
-import Navbar from '../LandingPage/Components/Navbar';
+import { MoveDirection } from "@tsparticles/engine";
+import { OutMode } from "@tsparticles/engine";
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TraderTrade from './Components/Tradertrade';
 
 function CreatorPlatform() {
   const [init, setInit] = useState(false);
-  const smoother = useRef<any>(null);
   const main = useRef<HTMLDivElement | null>(null);
-  const particlesLoaded = async (container?: Container): Promise<void> => {};
 
   const options = useMemo(
     () => ({
@@ -47,11 +43,9 @@ function CreatorPlatform() {
           value: '#ffffff',
         },
         move: {
-          direction: 'none',
+          direction: MoveDirection.none,
           enable: true,
-          outModes: {
-            default: 'bounce',
-          },
+          outModes: OutMode.bounce, 
           random: false,
           speed: 6,
           straight: false,
@@ -91,7 +85,6 @@ function CreatorPlatform() {
     <div className="Layer1" ref={main}>
       <Particles
         id="tsparticles"
-        particlesLoaded={particlesLoaded}
         options={options}
       />
       <div className="Layer2">

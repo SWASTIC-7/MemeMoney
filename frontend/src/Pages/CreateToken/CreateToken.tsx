@@ -1,17 +1,16 @@
-import React from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 import type { Container } from '@tsparticles/engine';
+import { MoveDirection } from "@tsparticles/engine";
+import { OutMode } from "@tsparticles/engine";
 import './CreateToken.css';
-import Navbar from '../LandingPage/Components/Navbar';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CreateForm from './Components/createForm';
 
 function CreateToken() {
   const [init, setInit] = useState(false);
-  const smoother = useRef<any>(null);
   const main = useRef<HTMLDivElement | null>(null);
-  const particlesLoaded = async (container?: Container): Promise<void> => {};
+  const particlesLoaded = async (_container?: Container): Promise<void> => {};
 
   const options = useMemo(
     () => ({
@@ -47,11 +46,9 @@ function CreateToken() {
           value: '#ffffff',
         },
         move: {
-          direction: 'none',
+          direction: MoveDirection.none,
           enable: true,
-          outModes: {
-            default: 'bounce',
-          },
+          outModes: OutMode.bounce,
           random: false,
           speed: 6,
           straight: false,
@@ -73,7 +70,7 @@ function CreateToken() {
         },
       },
       detectRetina: true,
-    }),
+    } ),
     []
   );
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import Data from './coin_data';
 import './Coin_buy.css';
 function Coin_buy() {
